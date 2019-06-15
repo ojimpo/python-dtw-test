@@ -1,6 +1,9 @@
 import csv
 import numpy as np
 from scipy.spatial.distance import euclidean
+import numpy as np
+from numpy import linalg as LA
+import matplotlib.pyplot as plt
 
 from fastdtw import fastdtw
 
@@ -41,9 +44,26 @@ taisukeRKnee = [float(i) for i in taisukeRKnee]
 taisukeLElbow = [float(i) for i in taisukeLElbow]
 taisukeRElbow = [float(i) for i in taisukeRElbow]
 
-def executeDTW(modA, modB):
-    distance, path = fastdtw(modA, modB, dist=euclidean)
-    print(distance)
-    print(path)
+# def executeDTW(modA, modB):
+#     distance, path = fastdtw(modA, modB, dist=euclidean)
+#     return distance
+#     return path
+#     print(distance)
+#     print(path)
 
-executeDTW(kazumaLElbow, taisukeLElbow)
+distance, path = fastdtw(kazumaLElbow, taisukeLElbow, dist=euclidean)
+
+plt.title('Left Elbow Joint Angles')
+plt.xlabel('frames')
+plt.ylabel('degrees')
+
+plt.plot(kazumaLElbow, label = 'Kazuma')
+plt.plot(taisukeLElbow, label = 'Taisuke')
+
+for line in path:
+    plt.plot(line, [kazumaLElbow[line[0]], taisukeLElbow[line[1]]], linewidth=0.2, c="gray")
+
+plt.grid()
+plt.legend(loc = 'upper left')
+
+plt.show()
